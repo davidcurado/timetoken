@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 '''
 Created on Mar 7, 2015
 @author: José David Fernández Curado
@@ -15,6 +15,7 @@ def int_to_base36(num):
         num /= 36
     parts.reverse()
     return ''.join(parts)
+
 def base36_to_int(num):
     val = 0
     for i in range(0, len(num)):
