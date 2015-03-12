@@ -15,12 +15,13 @@ try:
 except: raise
 
 setup(
-    name = 'pyramid_timetoken',
+    name = 'timetoken',
     version = version,
 
     author = u'José David Fernández Curado',
     author_email = 'david@dialeti.co',
 
     packages = find_packages('src'),
-    package_dir = {'' : 'src'}
+    package_dir = {'' : 'src'},
+    test_suite = 'timetoken.tests'
 )

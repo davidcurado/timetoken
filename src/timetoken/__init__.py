@@ -24,7 +24,7 @@ class TimeConstrainedTokenGenerator(object):
             dt = self._today()
         return (dt - date(2010, 1, 1)).days
     def text_value(self, user, cdate):
-        return '%d:%s:%d' (
+        return '%d:%s:%d' % (
             user.id,
             user.password,
             cdate
@@ -37,6 +37,3 @@ class TimeConstrainedTokenGenerator(object):
     def verify_token(self, user, token, days = 7):
         days, text = token.split('-')
         return text == self.text_value(user, base36_to_int(days))
-
-def includeme(config):
-    config.add_request_method(lambda: TimeConstrainedTokenGenerator(), 'token_generator', reify = True)
