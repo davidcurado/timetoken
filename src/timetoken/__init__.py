@@ -13,7 +13,7 @@ from .utils import int_to_base36
 
 
 VERSION = (0, 1, 0)
-__version__ = ''.join(str(i) for i in VERSION)
+__version__ = '.'.join(str(i) for i in VERSION)
 
 class TimeConstrainedTokenGenerator(object):
     base_date = date(2010, 1, 1)
