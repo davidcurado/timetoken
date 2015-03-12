@@ -15,8 +15,11 @@ VERSION = (0, 1, 0)
 __version__ = ''.join(str(i) for i in VERSION)
 
 class TimeConstrainedTokenGenerator(object):
+    def __init__(self, hashf = 'sha512', password = ''):
+        self.hashf = hashf
+        self.password = password
     def hash(self, s):
-        return hashlib.sha512(s).hexdigest()
+        return hashlib.new(self.hashf, s).hexdigest()
     def _today(self):
         return date.today()
     def _days(self, dt = None):
@@ -24,9 +27,10 @@ class TimeConstrainedTokenGenerator(object):
             dt = self._today()
         return (dt - date(2010, 1, 1)).days
     def text_value(self, user, cdate):
-        return '%d:%s:%d' % (
+        return '%d:%s:%s:%d' % (
             user.id,
             user.password,
+            self.password,
             cdate
         )
     def create_token(self, user):

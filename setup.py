@@ -12,7 +12,8 @@ from setuptools import setup, find_packages
 try:
     sys.path.append('src')
     from timetoken import __version__ as version
-except: raise
+except:
+    raise
 
 setup(
     name = 'timetoken',
