@@ -19,5 +19,7 @@ def int_to_base36(num):
 def base36_to_int(num):
     val = 0
     for i in range(0, len(num)):
+        if num[i] not in elements:
+            raise ValueError
         val = elements.index(num[i]) + val * 36
     return val

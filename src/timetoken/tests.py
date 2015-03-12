@@ -3,6 +3,7 @@
 Created on Mar 7, 2015
 @author: José David Fernández Curado
 '''
+import logging
 import random
 import unittest
 
@@ -17,6 +18,7 @@ class User(object):
 
 class UtilsTest(unittest.TestCase):
     def setUp(self):
+        logging.getLogger().setLevel(logging.CRITICAL)
         self.tg = TimeConstrainedTokenGenerator()
     def test_int_to_base36(self):
         self.assertEqual(int_to_base36(0), '0', 'int_to_base36(0)')
@@ -34,5 +36,9 @@ class UtilsTest(unittest.TestCase):
         n = 1000
         while n > 0:
             user = User(uid = random.randint(0, 1000), password = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz0123456789') for _ in range(10)))
-            self.tg.verify_token(user, self.tg.create_token(user), 1)
+            token = self.tg.create_token(user)
+            self.assertTrue(self.tg.verify_token(user, token, 1))
             n -= 1
+
+    def test_weird_tokens(self):
+        self.assertFalse(self.tg.verify_token(User(), 'fijidsolff'))

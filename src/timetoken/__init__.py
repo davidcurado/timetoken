@@ -5,6 +5,7 @@ Created on Mar 7, 2015
 '''
 from datetime import date
 import hashlib
+import logging
 
 from timetoken.utils import base36_to_int
 
@@ -15,6 +16,7 @@ VERSION = (0, 1, 0)
 __version__ = ''.join(str(i) for i in VERSION)
 
 class TimeConstrainedTokenGenerator(object):
+    base_date = date(2010, 1, 1)
     def __init__(self, hashf = 'sha512', password = ''):
         self.hashf = hashf
         self.password = password
@@ -39,5 +41,18 @@ class TimeConstrainedTokenGenerator(object):
             self.hash(self.text_value(user, self._days()))
         )
     def verify_token(self, user, token, days = 7):
-        days, text = token.split('-')
-        return text == self.text_value(user, base36_to_int(days))
+        try:
+            cdate, text = token.split('-')
+            cdate = base36_to_int(cdate)
+            days_passed = self._days(self._today()) - cdate
+            gentext = self.hash(self.text_value(user, cdate))
+            if text != gentext:
+                logging.info('Token did not match: %s != %s' % (text, gentext))
+                return False
+            if days_passed > days:
+                logging.info('Token has expired!')
+                return False
+            return True
+        except Exception as e:
+            logging.exception(e.message)
+            return False
